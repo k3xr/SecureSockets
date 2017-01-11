@@ -19,7 +19,9 @@ public class Client {
 		BufferedReader br1 = new BufferedReader(new InputStreamReader(System.in));
 		String host = br1.readLine();
 
-		System.setProperty("javax.net.ssl.trustStore","AlmacenSRTrust");
+		System.setProperty("javax.net.ssl.trustStore","AlmacenCLTrust");
+		System.setProperty("javax.net.ssl.keyStore","AlmacenCL");
+		System.setProperty("javax.net.ssl.keyStorePassword","oooooo");
 
 		SSLSocketFactory sslsocketfactory = (SSLSocketFactory)
 				SSLSocketFactory.getDefault();

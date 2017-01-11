@@ -4,10 +4,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.security.cert.X509Certificate;
 import java.util.Scanner;
 
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 
 public class Server {
@@ -17,10 +19,13 @@ public class Server {
 		try { 
 			System.setProperty("javax.net.ssl.keyStore","AlmacenSR");
 			System.setProperty("javax.net.ssl.keyStorePassword","oooooo");
+			System.setProperty("javax.net.ssl.trustStore","AlmacenSRTrust");
+			
 			SSLServerSocketFactory sslserversocketfactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
 			SSLServerSocket sslserversocket =(SSLServerSocket)
 					sslserversocketfactory.createServerSocket(9999);
 			SSLSocket socket = (SSLSocket) sslserversocket.accept();
+			socket.setNeedClientAuth(true);
 
 			InputStream inputStream = socket.getInputStream();
 			InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -65,13 +70,25 @@ public class Server {
 			}
 			sc1.close();
 
+			// OBTENCION DE LA SESION Y  DEL CERTIFICADO RECIBIDO DEL SERVIDOR Y EN EL CLIENTE
+
+			SSLSession sesion = socket.getSession();
+
+			System.out.println("Host: "+sesion.getPeerHost());
+
+			X509Certificate certificate = (X509Certificate)sesion.getPeerCertificates()[0];
+
+			System.out.println("Propietario: " + certificate.getSubjectDN());
+			System.out.println("Emisor: " + certificate.getIssuerDN());
+			System.out.println("Numero Serie: " + certificate.getSerialNumber());
+			System.out.println("to string: " + certificate.toString());
+
 			while((string = bufferedReader.readLine()) != null){
 				System.out.println(string);
 				Thread.currentThread();
 				Thread.sleep(1000);
 				bufferedWriter.write(string + "\n");
 				bufferedWriter.flush();
-
 			}
 
 		} catch (Exception e) {
