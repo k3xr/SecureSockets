@@ -1,7 +1,6 @@
-package socketsSeguros;
-
 import java.io.*;
 import java.security.cert.*;
+
 public class PrintCert {
 	public static void main(String args[]) {
 		try {

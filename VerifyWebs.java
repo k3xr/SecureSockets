@@ -1,5 +1,3 @@
-package socketsSeguros;
-
 import java.io.*;
 import java.security.cert.*;
 
